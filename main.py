@@ -1,3 +1,4 @@
+import eel
 from PIL import Image, ImageDraw
 import random
 from colorsys import rgb_to_hsv, hsv_to_rgb
@@ -11,7 +12,7 @@ def compare_clrs(clr1, clr2):
     distance = sqrt(distance)
     return distance
 
-def rand_clr(colors): 
+def rand_clr(colors):
     if colors != []:
         restart = True
         while restart:
@@ -34,6 +35,7 @@ def interpolate(start_clr, end_clr, factor: float):
         int(start_clr[2] * recip + end_clr[2] * factor)
     )
 
+@eel.expose
 def gen_art(size, amount, line_width, padding, type, border_width):
     colors = []
     image_size = size
@@ -50,7 +52,7 @@ def gen_art(size, amount, line_width, padding, type, border_width):
     border_clr = rand_clr(colors)
     colors.append(image_bg_clr)
     image = Image.new('RGB', (image_size, image_size), image_bg_clr)
-    
+   
     #Draw interface
     draw = ImageDraw.Draw(image)
 
@@ -71,26 +73,29 @@ def gen_art(size, amount, line_width, padding, type, border_width):
 
         line_cords = (rand_x, rand_y)
         line_color = interpolate(start_clr, end_clr, i / (line_amount - 1))
-        
+       
         draw.line(line_cords, line_color, line_width)
         last_point = rand_y
-    
+   
     #Save image
-    image.save('temp.png')
+    image.save('./www/temp.png')
 
     #Prints image to terminal
-    cmd = ['viu', 'temp.png']
-    with Popen(cmd, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
-        for line in p.stdout:
-            print(line, end='') # process line here
+    # cmd = ['viu', 'temp.png']
+    # with Popen(cmd, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
+    #     for line in p.stdout:
+    #         print(line, end='') # process line here
 
-if __name__ == "__main__":
-    print('Generating art:')
-    size = 64
-    line_amount = 200
-    line_width = 1
-    padding = 3
-    type = 2
-    border_width = 1
-    for i in range(1):
-        gen_art(size, line_amount, line_width, padding, type, border_width)
+# if __name__ == "__main__":
+#     print('Generating art:')
+#     size = 64
+#     line_amount = 200
+#     line_width = 1
+#     padding = 3
+#     type = 2
+#     border_width = 1
+#     for i in range(1):
+#         gen_art(size, line_amount, line_width, padding, type, border_width)
+
+eel.init('www')
+eel.start('index.html')
