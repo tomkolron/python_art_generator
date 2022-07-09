@@ -4,13 +4,27 @@
     <title>art generator</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link href="style.css" rel="stylesheet">
     <script src="eel.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
     <h1>art generator</h1> 
+    <h2>image size(px)</h2>
+    <div class="size_wrap">
+      <input class="size" value="64" type="range" min="16" max="128" step="4">
+      <p>64</p>
+    </div> 
+    <h2>line amount</h2>
+    <input class="line_amount" type="text" name="" value="">
+    <h2>line width(px)</h2>
+    <input class="line_width" type="text" name="" value="">
+    <h2>padding(px)</h2>
+    <input class="padding" type="text" name="" value="">
+    <h2>border size(px)</h2>
+    <input class="border_width" type="text" name="" value="">
     <button onclick="gen()">click to generate art</button>
-    <img src="../temp.png" alt="">
+    <img src="" alt="">
   </body>
 </html>

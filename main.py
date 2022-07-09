@@ -4,6 +4,8 @@ import random
 from colorsys import rgb_to_hsv, hsv_to_rgb
 from math import sqrt
 from subprocess import Popen, PIPE, CalledProcessError
+import base64
+from io import BytesIO
 
 def compare_clrs(clr1, clr2):
     r, g, b = clr1
@@ -37,6 +39,12 @@ def interpolate(start_clr, end_clr, factor: float):
 
 @eel.expose
 def gen_art(size, amount, line_width, padding, type, border_width):
+    size = int(size)
+    amount = int(amount)
+    line_width = int(line_width)
+    padding = int(padding)
+    type = int(type)
+    border_width = int(border_width)
     colors = []
     image_size = size
     if padding > 0:
@@ -77,14 +85,12 @@ def gen_art(size, amount, line_width, padding, type, border_width):
         draw.line(line_cords, line_color, line_width)
         last_point = rand_y
    
-    #Save image
-    image.save('./www/temp.png')
 
-    #Prints image to terminal
-    # cmd = ['viu', 'temp.png']
-    # with Popen(cmd, stdout=PIPE, bufsize=1, universal_newlines=True) as p:
-    #     for line in p.stdout:
-    #         print(line, end='') # process line here
+    #return Image
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode('utf-8')
+    return 'data:image/png;base64, ' + img_str
 
 # if __name__ == "__main__":
 #     print('Generating art:')
