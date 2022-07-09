@@ -1,4 +1,42 @@
+body {
+    display: grid;
+    place-items: center;
+    row-gap: 20px;
+}
+
+.wrap {
+  display: flex;
+  align-items: center;
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  margin-right: 10px;
+}
+
+input {
+  height: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+}
+
 img {
-  width: 800px;
+  width: 300px;
   image-rendering: pixelated;
 }
+
+.size_label {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  margin-left: 10px;
+}
+
+.imgs_wrap {
+  display: grid;
+  grid-template-columns: repeat(3, 300px);
+  grid-template-rows: repeat(3, 300px);
+}
+
