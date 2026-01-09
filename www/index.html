@@ -1,41 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>art generator</title>
+    <title>Art Generator</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css1?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link href="style.css" rel="stylesheet">
     <script src="eel.js"></script>
     <script src="script.js"></script>
   </head>
   <body>
-    <h1>art generator</h1> 
-    <div class="wrap">
-      <h2>image size(px)</h2>
-      <input class="size" value="128" type="range" min="16" max="128" step="4">
-      <p class="size_label">128</p>
-    </div> 
-    <div class="wrap">
-      <h2>line amount</h2>
-      <input class="line_amount" type="text" name="" value="50">
+    <div class="container">
+      <header>
+        <h1>🎨 Art Generator</h1>
+        <p class="subtitle">Create geometric art and animate it into videos</p>
+      </header> 
+      <section class="controls-section">
+        <div class="controls-grid">
+          <div class="control-item">
+            <label>Image Size (px)</label>
+            <div class="slider-wrapper">
+              <input class="size" value="256" type="range" min="128" max="1024" step="16">
+              <span class="size_label">256</span>
+            </div>
+          </div>
+          <div class="control-item">
+            <label>Line Amount</label>
+            <input class="line_amount" type="number" value="100" min="10" max="1000">
+          </div>
+          <div class="control-item">
+            <label>Line Width (px)</label>
+            <input class="line_width" type="number" value="1" min="1" max="100">
+          </div>
+          <div class="control-item">
+            <label>Line Width Variation (px)</label>
+            <input class="line_width_variation" type="number" value="3" min="0" max="100">
+          </div>
+          <div class="control-item">
+            <label>Padding (px)</label>
+            <input class="padding" type="number" value="0" min="0" max="200">
+          </div>
+          <div class="control-item">
+            <label>Border Size (px)</label>
+            <input class="border_width" type="number" value="0" min="0" max="50">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="gen()">Generate Art</button>
+      </section>
+
+      <section class="gallery-section">
+        <h2>Generated Art</h2>
+        <p class="hint">Click on an image to select it for video generation</p>
+        <div class="imgs_wrap"></div>
+      </section>
+
+      <div id="video-section" style="display: none;">
+        <section class="video-controls-section">
+          <h2>Video Generation</h2>
+          <div class="selected-info">
+            <span class="badge">Selected Art</span>
+          </div>
+          
+          <div class="controls-grid">
+            <div class="control-item">
+              <label>Animation Speed</label>
+              <div class="slider-wrapper">
+                <input class="video_speed" value="20.0" type="range" min="1.0" max="200.0" step="1.0">
+                <span class="video_speed_label">1.0x</span>
+              </div>
+              <small>Faster = quicker color/geometry changes (20x = 1.0x baseline)</small>
+            </div>
+            <div class="control-item">
+              <label>Zoom Level</label>
+              <div class="slider-wrapper">
+                <input class="video_zoom" value="1.50" type="range" min="0.5" max="2.0" step="0.05">
+                <span class="video_zoom_label">1.50x</span>
+              </div>
+              <small>&lt;1.0 = more room, &gt;1.0 = zoom in (no edges)</small>
+            </div>
+            <div class="control-item">
+              <label>Zoom Speed</label>
+              <div class="slider-wrapper">
+                <input class="video_zoom_speed" value="2.0" type="range" min="0.0" max="2.0" step="0.1">
+                <span class="video_zoom_speed_label">2.0x</span>
+              </div>
+              <small>How fast zoom changes (0 = static, higher = zooms in/out)</small>
+            </div>
+            <div class="control-item">
+              <label>End Line Amount</label>
+              <input class="end_line_amount" type="number" value="100" min="10" max="1000">
+            </div>
+            <div class="control-item">
+              <label>End Line Width (px)</label>
+              <input class="end_line_width" type="number" value="1" min="1" max="100">
+            </div>
+            <div class="control-item">
+              <label>End Line Width Variation (px)</label>
+              <input class="end_line_width_variation" type="number" value="3" min="0" max="100">
+            </div>
+            <div class="control-item">
+              <label>End Padding (px)</label>
+              <input class="end_padding" type="number" value="0" min="0" max="200">
+            </div>
+            <div class="control-item">
+              <label>End Border Size (px)</label>
+              <input class="end_border_width" type="number" value="0" min="0" max="50">
+            </div>
+          </div>
+          <button class="btn btn-success" onclick="generateVideo()">Generate 30 Second Video</button>
+          <div id="video-status"></div>
+        </section>
+
+        <section class="realtime-preview-section">
+          <h2>🎬 Real-Time Preview</h2>
+          <p class="hint">Watch the animation in real-time and adjust parameters to see changes instantly!</p>
+          <div style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="preview-toggle-btn" onclick="toggleRealtimePreview()">Start Real-Time Preview</button>
+            <div id="preview-status" style="color: #666; font-size: 0.9rem;"></div>
+          </div>
+          <div id="realtime-preview-container" style="display: none;">
+            <div style="display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 300px;">
+                <canvas id="realtime-canvas" style="max-width: 100%; border-radius: 12px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); background: #000;"></canvas>
+              </div>
+              <div style="min-width: 250px;">
+                <h3 style="margin-top: 0; color: #333;">Gyro Controls (Joystick)</h3>
+                <p style="color: #666; font-size: 0.9rem; margin-bottom: 20px;">Drag or click to control X/Y offset</p>
+                <div style="position: relative; width: 200px; height: 200px; margin: 0 auto; background: #f0f0f0; border-radius: 50%; border: 3px solid #667eea; cursor: crosshair; touch-action: none;" id="joystick-container">
+                  <div style="position: absolute; width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); transition: transform 0.1s ease-out;" id="joystick-handle"></div>
+                  <div style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: #667eea; font-weight: bold;">Y</div>
+                  <div style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #667eea; font-weight: bold;">X</div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                  <div style="display: inline-block; margin: 0 15px;">
+                    <span style="font-size: 0.85rem; color: #666;">X: </span>
+                    <span class="gyro_x_label" style="font-weight: bold; color: #667eea;">0.00</span>
+                  </div>
+                  <div style="display: inline-block; margin: 0 15px;">
+                    <span style="font-size: 0.85rem; color: #666;">Y: </span>
+                    <span class="gyro_y_label" style="font-weight: bold; color: #667eea;">0.00</span>
+                  </div>
+                </div>
+                <button class="btn" onclick="resetJoystick()" style="margin-top: 15px; width: 100%; background: #e0e0e0; color: #333; font-size: 0.9rem; padding: 8px;">Reset to Center</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="preview-section">
+          <div class="preview-grid">
+            <div class="preview-item">
+              <h3>Selected Art</h3>
+              <div id="selected-image-container"></div>
+            </div>
+            <div class="preview-item">
+              <h3>Generated Video</h3>
+              <div id="video-container"></div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
-    <div class="wrap">
-      <h2>line width(px)</h2>
-      <input class="line_width" type="text" name="" value="4">
-    </div>
-    <div class="wrap">
-      <h2>padding(px)</h2>
-      <input class="padding" type="text" name="" value="10">
-    </div>
-    <div class="wrap">
-      <h2>border size(px)</h2>
-      <input class="border_width" type="text" name="" value="4">
-    </div>
-    <button onclick="gen()">click to generate art</button>
-    <div class="imgs_wrap"></div>
   </body>
 </html>

@@ -2,9 +2,20 @@ This is an art generator app written in python in order to use it:
 ```
 git clone https://github.com/tomkolron/python_art_generator/
 cd python_art_generator
-pip install eel
+pip install eel imageio imageio-ffmpeg
 python3 main.py
 ```
+
+## Features
+
+- Generate random geometric art pieces with customizable parameters
+- Select any generated art piece by clicking on it
+- Generate 30-second videos that slowly interpolate parameters while keeping the same geometric structure
+- Videos smoothly transition between parameter values creating cool animated effects
+
+## Video Generation
+
+After generating art pieces, click on any image to select it. Then set the "end" parameters to define where the video should transition to. Click "Generate 30 Second Video" to create a smooth animation that tweaks parameters over time while maintaining the same geometric structure.
 these are some examples:
 
 ![art](https://github.com/tomkolron/python_art_generator/assets/31801167/68a52d3d-4bd8-4323-af08-ff6eb35d8dd4)
